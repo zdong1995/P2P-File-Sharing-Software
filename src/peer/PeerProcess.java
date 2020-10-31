@@ -11,26 +11,35 @@ import java.util.ArrayList;
 
 public class PeerProcess extends Peer implements Runnable {
 
-  private ArrayList<Integer> connectedPeers;
-  private ServerSocket listener;
   ObjectOutputStream out;
   ObjectInputStream in;
+  private ArrayList<Integer> connectedPeers;
+  private ServerSocket listener;
+
+  public PeerProcess(int peerID) {
+    super(peerID);
+    connectedPeers = new ArrayList<>();
+  }
 
   public PeerProcess(int peerID, boolean hasFile, String hostName, int portNum) {
     super(peerID, hasFile, hostName, portNum);
-    this.connectedPeers = new ArrayList<>();
+    connectedPeers = new ArrayList<>();
     System.out.println("hasFile=" + hasFile + ", this.hasFile=" + this.hasFile);
     System.out.println("creat a peer with peerID=" + peerID);
   }
 
+  public PeerProcess() {
+    super();
+  }
+
   public void makeConnection(int anotherPeerID) { // TODO
     System.out.println("make connection to another peerID=" +
-        Integer.toString(anotherPeerID));
+        anotherPeerID);
     try {
       // create a socket to connect to the server
       Socket hostSocket = new Socket("localhost", this.getPortNum());
-      System.out.println("Connecting to localhost in port " + Integer.toString(this.portNum));
-      String message_out = "P2PFILESHARINGPROJ" + "0000000000" + Integer.toString(this.peerID); // Test only
+      System.out.println("Connecting to localhost in port " + this.portNum);
+      String message_out = "P2PFILESHARINGPROJ" + "0000000000" + this.peerID; // Test only
       System.out.println("message_out=" + message_out);
       this.connector.sendMessage(message_out, hostSocket);
     } catch (ConnectException e) {
@@ -97,8 +106,27 @@ public class PeerProcess extends Peer implements Runnable {
     }
   }
 
+  public void printInfo() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("Detail info of this peerProcess is as below:");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("peerID=" + this.peerID);
+    System.out.println("hasFile =" + this.isHasFile());
+    System.out.println("hostname=" + this.hostName);
+    System.out.println("NumberOfPreferredNeighbors="+Integer.toString(this.getNumberOfPreferredNeighbors()));
+    System.out.println("UnchokingInterval=" + this.getUnchokingInterval());
+    System.out.println("OptimisticUnchokingInterval=" + Integer.toString(this.getOptimisticUnchokingInterval()));
+    System.out.println("FileName=" + this.getFileName());
+    System.out.println("FileSize=" + this.getFileSize());
+    System.out.println("PieceSize=" + this.getPieceSize());
+    System.out.println("listeningport =" + this.getPortNum());
+  }
+
   @Override
   public void run() {
-
+    System.out.println("Starting peer " + peerID);
+    startListener();
+    startSender();
+    // other
   }
 }
