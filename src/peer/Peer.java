@@ -6,18 +6,18 @@ import java.net.Socket;
 
 public class Peer {
 
-  private int peerID; //peer id, should be distinct from each other
-  private boolean hasFile;
-  private String hostName;
-  private int portNum; // number of listening port
+  protected int peerID; //peer id, should be distinct from each other
+  protected boolean hasFile;
+  protected String hostName;
+  protected int portNum; // number of listening port
   private int NumberOfPreferredNeighbors; // TODO
   private int UnchokingInterval;
   private int OptimisticUnchokingInterval;
   private String FileName;
   private int FileSize;
   private int PieceSize;
-  private connectionHandler connector;
-  private Socket hostSocket; // socket connect to the server
+  protected connectionHandler connector;
+  protected Socket hostSocket; // socket connect to the server
 
   public Peer(int peerID) {
     this.peerID = peerID;

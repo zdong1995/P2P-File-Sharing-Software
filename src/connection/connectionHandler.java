@@ -2,12 +2,15 @@ package connection;
 
 import peer.Peer;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.*;
 
-public class connectionHandler {
+public class connectionHandler extends Thread {
+
   private Peer host;
   private Peer neighbor;
   private ServerSocket listener;
@@ -21,5 +24,20 @@ public class connectionHandler {
     this.listener = listener;
     this.out = out;
     this.in = in;
+  }
+
+  public void sendMessage(String msg, Socket requestSocket) {
+    try {
+      out = new ObjectOutputStream(requestSocket.getOutputStream());
+      out.writeObject(msg);
+      out.flush();
+      System.out.println("Send message: " + msg );
+    } catch (IOException ioException) {
+      ioException.printStackTrace();
+    }
+  }
+
+  public void receiveMessage() { // TODO
+
   }
 }
