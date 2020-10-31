@@ -1,7 +1,10 @@
 package peer;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ConnectException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -9,6 +12,9 @@ import java.util.ArrayList;
 public class PeerProcess extends Peer implements Runnable {
 
   private ArrayList<Integer> connectedPeers;
+  private ServerSocket listener;
+  ObjectOutputStream out;
+  ObjectInputStream in;
 
   public PeerProcess(int peerID, boolean hasFile, String hostName, int portNum) {
     super(peerID, hasFile, hostName, portNum);
@@ -17,7 +23,9 @@ public class PeerProcess extends Peer implements Runnable {
     System.out.println("creat a peer with peerID=" + peerID);
   }
 
-  public void makeConnection() throws Exception { // TODO
+  public void makeConnection(int anotherPeerID) { // TODO
+    System.out.println("make connection to another peerID=" +
+        Integer.toString(anotherPeerID));
     try {
       // create a socket to connect to the server
       Socket hostSocket = new Socket("localhost", this.getPortNum());
@@ -46,7 +54,47 @@ public class PeerProcess extends Peer implements Runnable {
   }
 
   public void startListener() { // TODO
+    try {
+      listener = new ServerSocket(this.portNum);
+      Socket connection = listener.accept();
+      while (true) { // TODO
+        if (connection != null) {
+          System.out.println("Connecting to client");
+          out = new ObjectOutputStream(connection.getOutputStream());
+          out.flush();
+          in = new ObjectInputStream(connection.getInputStream());
+          String message_in = (String) in.readObject();
+          System.out.println("receive message " + message_in + ", length=" + message_in.length());
 
+          // check the correctness of handshake
+          if (message_in.length() == 32) {
+            String header = message_in.substring(0, 18);
+            if (header.equals("P2PFILESHARINGPROJ")) {
+              int anotherPeerID = Integer.parseInt(message_in.substring(28, 32));
+              if (!connectedPeers.contains(anotherPeerID)) {
+                connectedPeers.add(anotherPeerID);
+                System.out.println("handshake header correct, peer " + anotherPeerID + " is added to connected list");
+                makeConnection(anotherPeerID);
+              } else {
+                System.out.println("handshake header correct, but this peer is already connected");
+              }
+            }
+          }
+        }
+      }
+    } catch (ClassNotFoundException classnot) {
+      System.err.println("Data received in unknown format");
+    } catch (IOException ioException) {
+      System.out.println("Disconnect with Client 1");
+    } finally {
+      // Close connections
+      try {
+        in.close();
+        out.close();
+      } catch (IOException ioException) {
+        System.out.println("Disconnect with Client 2");
+      }
+    }
   }
 
   @Override
