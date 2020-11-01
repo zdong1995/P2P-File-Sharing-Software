@@ -11,7 +11,7 @@ public class Peer {
   protected int portNum; // number of listening port
   protected boolean hasFile;
 
-  private CommonConfig config;
+  protected CommonConfig config;
 
   protected connectionHandler connector;
   protected Socket hostSocket; // socket connect to the server
@@ -39,6 +39,22 @@ public class Peer {
 
   }
 
+  public void setHostName(String s) {
+    hostName = s;
+  }
+
+  public void setPortNum(int parseInt) {
+    portNum = parseInt;
+  }
+
+  public int getPeerId() {
+    return peerID;
+  }
+
+  public void setHasFile(boolean bool) {
+    hasFile = bool;
+  }
+
   public boolean isHasFile() {
     return hasFile;
   }
@@ -63,19 +79,4 @@ public class Peer {
     this.hostSocket = hostSocket;
   }
 
-  public void setHostName(String s) {
-    hostName = s;
-  }
-
-  public void setPortNum(int parseInt) {
-    portNum = parseInt;
-  }
-
-  public int getPeerId() {
-    return peerID;
-  }
-
-  public void setHasFile(boolean bool) {
-    hasFile = bool;
-  }
 }

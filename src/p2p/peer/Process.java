@@ -14,6 +14,7 @@ public class Process extends Peer implements Runnable {
   ObjectOutputStream out;
   ObjectInputStream in;
   private ArrayList<Integer> connectedPeers;
+  private ArrayList<Process> peersAhead;
   private ServerSocket listener;
 
   public Process(int peerID) {
@@ -21,7 +22,7 @@ public class Process extends Peer implements Runnable {
     connectedPeers = new ArrayList<>();
   }
 
-  public Process(int peerID, boolean hasFile, String hostName, int portNum) {
+  public Process(int peerID, String hostName, int portNum, boolean hasFile) {
     super(peerID, hasFile, hostName, portNum);
     connectedPeers = new ArrayList<>();
     System.out.println("hasFile=" + hasFile + ", this.hasFile=" + this.hasFile);
@@ -134,12 +135,6 @@ public class Process extends Peer implements Runnable {
     System.out.println("peerID=" + this.peerID);
     System.out.println("hasFile =" + this.isHasFile());
     System.out.println("hostname=" + this.hostName);
-    System.out.println("NumberOfPreferredNeighbors="+Integer.toString(this.getNumberOfPreferredNeighbors()));
-    System.out.println("UnchokingInterval=" + this.getUnchokingInterval());
-    System.out.println("OptimisticUnchokingInterval=" + Integer.toString(this.getOptimisticUnchokingInterval()));
-    System.out.println("FileName=" + this.getFileName());
-    System.out.println("FileSize=" + this.getFileSize());
-    System.out.println("PieceSize=" + this.getPieceSize());
     System.out.println("listeningport =" + this.getPortNum());
   }
 
@@ -149,9 +144,5 @@ public class Process extends Peer implements Runnable {
     startListener();
     // startSender();
     // other
-  }
-
-  public static void main(String[] args) {
-    System.out.println("Test");
   }
 }
