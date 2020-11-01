@@ -5,6 +5,9 @@ import java.text.ParseException;
 import java.util.*;
 
 public class PeerInfo {
+  /**
+   * Wrapper class of Peer Information specified in "PeerInfo.cfg"
+   */
   private int peerId;
   private String hostName;
   private int portNum;
@@ -15,32 +18,6 @@ public class PeerInfo {
     this.hostName = hostName;
     this.portNum = portNum;
     this.hasFile = hasFile;
-  }
-
-  public int getPeerId() {
-    return peerId;
-  }
-
-  public String getHostName() {
-    return hostName;
-  }
-
-  public int getPortNum() {
-    return portNum;
-  }
-
-  public boolean isHasFile() {
-    return hasFile;
-  }
-
-  @Override
-  public String toString() {
-    return "PeerInfo{" +
-        "peerId=" + peerId +
-        ", hostName='" + hostName + '\'' +
-        ", portNum=" + portNum +
-        ", hasFile=" + hasFile +
-        '}';
   }
 
   /**
@@ -73,36 +50,30 @@ public class PeerInfo {
     }
     return res;
   }
-  /*
-  public static Process setPeerInfo() {
-    Process peerPs = new Process();
-    List<PeerInfo> peersToConnect = new ArrayList<>(); //
 
-    boolean thisPeerFound = false;
-    // read PeerInfo.cfg and set the value of hasFile
-    try {
-      File myObj = new File("PeerInfo.cfg");
-      Scanner myReader = new Scanner(myObj);
-      while (myReader.hasNextLine()) {
-        String data = myReader.nextLine();
-        String[] temp = data.split(" ", 0);
-        if(temp[0].equals(Integer.toString(peerPs.getPeerId()))){
-          peerPs.setHostName(temp[1]);
-          peerPs.setPortNum(Integer.parseInt(temp[2]));
-          peerPs.setHasFile(temp[3].equals("1"));
-          thisPeerFound = true;
-        }
-        if (!thisPeerFound) {
-          peersToConnect.add(Integer.parseInt(temp[0]));
-        }
-      }
-      // peerPs.setBitField(hasFile);
-      myReader.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-    }
-    return peerPs;
+  public int getPeerId() {
+    return peerId;
   }
-   */
+
+  public String getHostName() {
+    return hostName;
+  }
+
+  public int getPortNum() {
+    return portNum;
+  }
+
+  public boolean isHasFile() {
+    return hasFile;
+  }
+
+  @Override
+  public String toString() {
+    return "PeerInfo{" +
+        "peerId=" + peerId +
+        ", hostName='" + hostName + '\'' +
+        ", portNum=" + portNum +
+        ", hasFile=" + hasFile +
+        '}';
+  }
 }

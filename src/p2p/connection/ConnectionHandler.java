@@ -7,14 +7,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class connectionHandler extends Thread {
-
+public class ConnectionHandler extends Thread {
+  /**
+   * Connection Handler Thread for connection and messaging
+   * between host and neighbor
+   */
   private Peer host;
   private Peer neighbor;
   private ObjectOutputStream out; // stream write to the socket
   private ObjectInputStream in; // stream read from the socket
 
-  public connectionHandler(Peer host, Peer neighbor, ObjectOutputStream out, ObjectInputStream in) {
+  public ConnectionHandler(Peer host, Peer neighbor, ObjectOutputStream out, ObjectInputStream in) {
     this.host = host;
     this.neighbor = neighbor;
     this.out = out;
@@ -33,10 +36,6 @@ public class connectionHandler extends Thread {
   }
 
   public void receiveMessage() { // TODO
-
-  }
-
-  public void terminate() { // TODO
 
   }
 }

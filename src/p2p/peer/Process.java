@@ -1,41 +1,54 @@
 package p2p.peer;
 
 import p2p.config.CommonConfig;
+import p2p.connection.ConnectionHandler;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+
+import java.util.*;
 
 public class Process extends Peer implements Runnable {
 
-  ObjectOutputStream out;
-  ObjectInputStream in;
-  private ArrayList<Integer> connectedPeers;
-  private ArrayList<Process> peersAhead;
+  /**
+   * PeerProcess inherited Peer to be Runnable Thread related to
+   */
+  private Map<Integer, Peer> connectedPeers;
   private ServerSocket listener;
 
-  public Process(int peerID) {
-    super(peerID);
-    connectedPeers = new ArrayList<>();
-  }
+  ObjectOutputStream out;
+  ObjectInputStream in;
 
   public Process(int peerID, String hostName, int portNum, boolean hasFile) {
     super(peerID, hasFile, hostName, portNum);
-    connectedPeers = new ArrayList<>();
-    System.out.println("hasFile=" + hasFile + ", this.hasFile=" + this.hasFile);
-    System.out.println("creat a p2p.peer with peerID=" + peerID);
+    connectedPeers = new HashMap<>();
   }
 
   public Process(int peerID, CommonConfig config) {
     super(peerID, config);
+    connectedPeers = new HashMap<>();
   }
 
-  public void makeConnection(int anotherPeerID) { // TODO
+  /**
+   * Establish connection between host peer and neighbor peer by creating
+   * connection handler thread and update the connector field of neighbour
+   *
+   * @param peerId peerId of neighbor peer
+   */
+  public void makeConnection(int peerId) { // TODO
     System.out.println("make p2p connection to another peerID = " +
-        anotherPeerID);
+        peerId);
+
+    // TODO: Handshake
+
+    Peer neighbor = connectedPeers.get(peerId);
+    ConnectionHandler connector = new ConnectionHandler(this, neighbor, out, in);
+    connector.start();
+    // neighbor.setConnector(connector);
+
     /*
     try {
       // create a socket to connect to the server
@@ -63,12 +76,14 @@ public class Process extends Peer implements Runnable {
         ioException.printStackTrace();
       }
     }
-     */
+    */
   }
+
 
   public void startSender() { // TODO
     System.out.println("Starting Sender");
-    /*new Thread() {
+    /*
+    new Thread() {
       public void run() {
         try {
 
@@ -80,12 +95,35 @@ public class Process extends Peer implements Runnable {
     */
   }
 
+  /**
+   * Initialize Peer Process to create one Thread and internally call
+   * start() method to run the Thread
+   */
   public void initialize() {
     Thread t = new Thread(this);
     System.out.println("Peer Process with PeerId = " + this.peerID + "is Running");
     t.start();
   }
 
+  /**
+   * Terminate thread when peer all received completed files
+   */
+  public void terminate() { // TODO
+    new Thread() {
+      @Override
+      public void run() {
+        try {
+          Thread.sleep(50000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }.start();
+  }
+  /**
+   * Start listener on a socket to accept handshake message
+   *
+   */
   public void startListener() { // TODO
     System.out.println("Starting Listener");
     new Thread() {
@@ -94,7 +132,7 @@ public class Process extends Peer implements Runnable {
         try {
           listener = new ServerSocket(portNum);
           Socket connection = listener.accept();
-          while (true) { // TODO
+          while (!listener.isClosed()) { // TODO
             if (connection != null) {
               System.out.println("Connecting to client");
               out = new ObjectOutputStream(connection.getOutputStream());
@@ -108,8 +146,8 @@ public class Process extends Peer implements Runnable {
                 String header = message_in.substring(0, 18);
                 if (header.equals("P2PFILESHARINGPROJ")) {
                   int anotherPeerID = Integer.parseInt(message_in.substring(28, 32));
-                  if (!connectedPeers.contains(anotherPeerID)) {
-                    connectedPeers.add(anotherPeerID);
+                  if (!connectedPeers.containsKey(anotherPeerID)) {
+                    connectedPeers.put(anotherPeerID, new Peer(anotherPeerID));
                     System.out.println("handshake header correct, p2p.peer " + anotherPeerID + " is added to connected list");
                     makeConnection(anotherPeerID);
                   } else {

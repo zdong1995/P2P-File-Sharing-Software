@@ -1,11 +1,14 @@
 package p2p.peer;
 
 import p2p.config.CommonConfig;
-import p2p.connection.connectionHandler;
+import p2p.connection.ConnectionHandler;
 
 import java.net.Socket;
 
 public class Peer {
+  /**
+   * Peer Class with all peer information specified in "PeerInfo.cfg"
+   */
 
   protected int peerID; // p2p.peer id, should be distinct from each other
   protected String hostName;
@@ -14,12 +17,8 @@ public class Peer {
 
   protected CommonConfig config;
 
-  protected connectionHandler connector;
+  protected ConnectionHandler connector;
   protected Socket hostSocket; // socket connect to the server
-
-  public Peer(int peerID) {
-    this.peerID = peerID;
-  }
 
   public Peer(int peerID, boolean hasFile, String hostName, int portNum) {
     this.peerID = peerID;
@@ -33,8 +32,8 @@ public class Peer {
     this.config = config;
   }
 
-  public Peer() {
-
+  public Peer(int peerID) {
+    this.peerID = peerID;
   }
 
   public void setHostName(String s) {
@@ -61,11 +60,11 @@ public class Peer {
     return portNum;
   }
 
-  public connectionHandler getConnector() {
+  public ConnectionHandler getConnector() {
     return connector;
   }
 
-  public void setConnector(connectionHandler connector) {
+  public void setConnector(ConnectionHandler connector) {
     this.connector = connector;
   }
 

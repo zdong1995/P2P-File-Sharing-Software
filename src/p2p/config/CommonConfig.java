@@ -5,8 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class CommonConfig {
-
-  private int numberOfPreferredNeighbors; // TODO
+  /**
+   * Common properties of peers specified in "Common.cfg"
+   */
+  private int numberOfPreferredNeighbors;
   private int unchokingInterval;
   private int optimisticUnchokingInterval;
   private String fileName;
