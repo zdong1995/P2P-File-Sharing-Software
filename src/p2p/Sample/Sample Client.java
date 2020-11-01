@@ -1,10 +1,7 @@
-package Sample;
+package p2p.Sample;
 
 import java.net.*;
 import java.io.*;
-import java.nio.*;
-import java.nio.channels.*;
-import java.util.*;
 
 class Client {
   Socket requestSocket;           //socket connect to the server
