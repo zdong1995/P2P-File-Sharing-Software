@@ -1,6 +1,7 @@
 # CNT 5106C - P2P File Sharing Software
+Java implementation of a P2P file sharing software similar to BitTorren. BitTorrent is a popular P2P protocol for file distribution. Among its interesting features, you are asked to implement the choking-unchoking mechanism which is one of the most important features of BitTorrent.
 
-### Summary
+### Project Structure
 
 ### Usage
 #### p2p.sample Client and Server
