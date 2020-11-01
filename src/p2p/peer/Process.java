@@ -1,12 +1,12 @@
 package p2p.peer;
 
+import p2p.config.CommonConfig;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Process extends Peer implements Runnable {
@@ -29,13 +29,14 @@ public class Process extends Peer implements Runnable {
     System.out.println("creat a p2p.peer with peerID=" + peerID);
   }
 
-  public Process() {
-    super();
+  public Process(int peerID, CommonConfig config) {
+    super(peerID, config);
   }
 
   public void makeConnection(int anotherPeerID) { // TODO
-    System.out.println("make p2p.connection to another peerID=" +
+    System.out.println("make p2p connection to another peerID = " +
         anotherPeerID);
+    /*
     try {
       // create a socket to connect to the server
       Socket hostSocket = new Socket("localhost", this.getPortNum());
@@ -62,6 +63,7 @@ public class Process extends Peer implements Runnable {
         ioException.printStackTrace();
       }
     }
+     */
   }
 
   public void startSender() { // TODO
@@ -76,6 +78,12 @@ public class Process extends Peer implements Runnable {
       }
     }.start();
     */
+  }
+
+  public void initialize() {
+    Thread t = new Thread(this);
+    System.out.println("Peer Process with PeerId = " + this.peerID + "is Running");
+    t.start();
   }
 
   public void startListener() { // TODO
@@ -128,14 +136,11 @@ public class Process extends Peer implements Runnable {
     }.start();
   }
 
-  public void printInfo() {
-    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    System.out.println("Detail info of this peerProcess is as below:");
-    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    System.out.println("peerID=" + this.peerID);
-    System.out.println("hasFile =" + this.isHasFile());
-    System.out.println("hostname=" + this.hostName);
-    System.out.println("listeningport =" + this.getPortNum());
+  @Override
+  public String toString() {
+    return "PeerProcess Information: " + "peerID = " + this.peerID +
+        ", hasFile = " + this.isHasFile() + ", hasFile = " +
+        this.isHasFile() + ", portNumber = " + this.getPortNum();
   }
 
   @Override

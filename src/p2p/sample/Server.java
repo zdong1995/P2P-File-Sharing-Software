@@ -1,4 +1,4 @@
-package p2p.Sample;
+package p2p.sample;
 
 import java.net.*;
 import java.io.*;

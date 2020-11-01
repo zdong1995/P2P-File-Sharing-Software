@@ -1,45 +1,50 @@
-package p2p.Test;
-
-import p2p.peer.Process;
+package p2p.config;
 
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
 
-public class Config {
+public class PeerInfo {
+  private int peerId;
+  private String hostName;
+  private int portNum;
+  private boolean hasFile;
 
-  public static class PeerInfo {
-    private int peerId;
-    private String hostName;
-    private int portNum;
-    private boolean hasFile;
+  public PeerInfo(int peerId, String hostName, int portNum, boolean hasFile) {
+    this.peerId = peerId;
+    this.hostName = hostName;
+    this.portNum = portNum;
+    this.hasFile = hasFile;
+  }
 
-    public PeerInfo(int peerId, String hostName, int portNum, boolean hasFile) {
-      this.peerId = peerId;
-      this.hostName = hostName;
-      this.portNum = portNum;
-      this.hasFile = hasFile;
-    }
+  public int getPeerId() {
+    return peerId;
+  }
 
-    public int getPeerId() {
-      return peerId;
-    }
+  public String getHostName() {
+    return hostName;
+  }
 
-    public String getHostName() {
-      return hostName;
-    }
+  public int getPortNum() {
+    return portNum;
+  }
 
-    public int getPortNum() {
-      return portNum;
-    }
+  public boolean isHasFile() {
+    return hasFile;
+  }
 
-    public boolean isHasFile() {
-      return hasFile;
-    }
+  @Override
+  public String toString() {
+    return "PeerInfo{" +
+        "peerId=" + peerId +
+        ", hostName='" + hostName + '\'' +
+        ", portNum=" + portNum +
+        ", hasFile=" + hasFile +
+        '}';
   }
 
   /**
-   * Read PeerInfo.cfg to create the list of peer info to create PeerPrcoss
+   * Read PeerInfo.cfg to create the list of peer info to create PeerProcess
    * @param path
    * @return
    */
@@ -57,7 +62,8 @@ public class Config {
         if (info.length != 4) {
           throw new ParseException(line, idx);
         }
-        res.add(new PeerInfo(Integer.parseInt(info[0]), info[1], info[2], info[3].equals("1")));
+        res.add(new PeerInfo(Integer.parseInt(info[0]), info[1],
+            Integer.parseInt(info[2]), info[3].equals("1")));
         idx++;
       }
     } catch (FileNotFoundException e) {
@@ -67,7 +73,7 @@ public class Config {
     }
     return res;
   }
-
+  /*
   public static Process setPeerInfo() {
     Process peerPs = new Process();
     List<PeerInfo> peersToConnect = new ArrayList<>(); //
@@ -98,4 +104,5 @@ public class Config {
     }
     return peerPs;
   }
+   */
 }

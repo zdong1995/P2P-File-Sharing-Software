@@ -1,4 +1,4 @@
-package p2p.Sample;
+package p2p.sample;
 
 import java.net.*;
 import java.io.*;
@@ -10,30 +10,30 @@ class Client {
   String message;                //message send to the server
   String MESSAGE;                //capitalized message read from the server
 
-  public void Client() {
+  public Client() {
   }
 
   void run() {
     try {
-      //create a socket to connect to the server
+      // create a socket to connect to the server
       requestSocket = new Socket("localhost", 8000);
       System.out.println("Connected to localhost in port 8000");
-      //initialize inputStream and outputStream
+      // initialize inputStream and outputStream
       out = new ObjectOutputStream(requestSocket.getOutputStream());
       out.flush();
       in = new ObjectInputStream(requestSocket.getInputStream());
 
-      //get Input from standard input
+      // get Input from standard input
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
       while (true) {
         System.out.print("Hello, please input a sentence: ");
-        //read a sentence from the standard input
+        // read a sentence from the standard input
         message = bufferedReader.readLine();
-        //Send the sentence to the server
+        // Send the sentence to the server
         sendMessage(message);
-        //Receive the upperCase sentence from the server
+        // Receive the upperCase sentence from the server
         MESSAGE = (String) in.readObject();
-        //show the message to the user
+        // show the message to the user
         System.out.println("Receive message: " + MESSAGE);
       }
     } catch (ConnectException e) {
@@ -56,7 +56,7 @@ class Client {
     }
   }
 
-  //send a message to the output stream
+  // send a message to the output stream
   void sendMessage(String msg) {
     try {
       //stream write the message
@@ -67,7 +67,7 @@ class Client {
     }
   }
 
-  //main method
+  // main method
   public static void main(String args[]) {
     Client client = new Client();
     client.run();

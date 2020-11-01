@@ -1,6 +1,4 @@
-package p2p.peer;
-
-import p2p.Test.Config;
+package p2p.config;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

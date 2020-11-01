@@ -1,5 +1,6 @@
 package p2p.peer;
 
+import p2p.config.CommonConfig;
 import p2p.connection.connectionHandler;
 
 import java.net.Socket;
@@ -27,11 +28,8 @@ public class Peer {
     this.portNum = portNum;
   }
 
-  public Peer(int peerID, String hostName, int portNum, boolean hasFile, CommonConfig config) {
+  public Peer(int peerID, CommonConfig config) {
     this.peerID = peerID;
-    this.hostName = hostName;
-    this.portNum = portNum;
-    this.hasFile = hasFile;
     this.config = config;
   }
 
